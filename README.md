@@ -1,4 +1,4 @@
-"# E2E ML Project
+## End-to-End Machine Learning Project
 
 This repository contains an end-to-end machine learning pipeline for a student performance prediction task.
 The project demonstrates data ingestion, preprocessing, and model training scaffolding using Python, scikit-learn, and related libraries.
@@ -97,4 +97,3 @@ X_train, y_train, X_test, y_test, preprocessor = transformation.initiate_data_tr
 ## Author
 
 Aishwarya Vadlamudi
-" 

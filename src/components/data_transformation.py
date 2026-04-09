@@ -1,13 +1,16 @@
 """Data transformation component for the E2E ML project.
 
-This module defines the transformation pipeline used to prepare raw training
-and testing data for modeling. It handles feature selection, missing value
-imputation, scaling, and encoding of categorical variables.
+This module defines preprocessing pipelines used to prepare raw training and
+testing data for modeling. It creates and saves a transformer that imputes
+missing values, scales numeric features, one-hot encodes nominal categories,
+and ordinally encodes ordered categorical features.
 """
 
+import os
 import sys
 
 import pandas as pd
+import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -18,25 +21,125 @@ from sklearn.preprocessing import StandardScaler
 from src.components.data_ingestion import DataIngestion
 from src.exception import CustomException
 from src.logger import logging
+from dataclasses import dataclass
+
+from src.utils import save_object
+
+
+@dataclass
+class DataTransformationConfig:
+    preprocessor_obj_file_path = os.path.join("artifacts", "preprocessor.pkl")
 
 
 class DataTransformation:
-    """Prepares raw tabular data for machine learning.
+    """Prepare raw training and test data for modeling.
 
-    This class orchestrates the ingestion of raw data and applies preprocessing
-    steps to numeric, nominal, and ordinal features.
+    This class builds preprocessing pipelines for numeric, nominal, and ordinal
+    features, persists the fitted transformer, and transforms ingested datasets
+    into arrays suitable for model training and evaluation.
     """
 
     def __init__(self):
-        """Initialize the data transformation component."""
+        """Initialize the data transformation component.
+
+        The component loads configuration and prepares the ingestion helper.
+        """
+        self.data_transformation_config = DataTransformationConfig()
         self.data_ingestion = DataIngestion()
 
+    def get_preprocessing_pipeline(
+        self, numeric_features, nominal_features, ordinal_features, ordinal_order
+    ):
+        """Build and save the preprocessing pipeline.
+
+        The pipeline imputes missing values, scales numeric features, one-hot
+        encodes nominal features, and ordinally encodes ordered categorical
+        features.
+
+        Parameters
+        ----------
+        numeric_features : list[str]
+            Names of numeric feature columns.
+        nominal_features : list[str]
+            Names of nominal categorical feature columns.
+        ordinal_features : list[str]
+            Names of ordered categorical feature columns.
+        ordinal_order : list[list[str]]
+            Ordered categories for each ordinal feature.
+
+        Returns
+        -------
+        sklearn.compose.ColumnTransformer
+            The assembled preprocessing transformer.
+        """
+        logging.info("Creating preprocessing pipeline object")
+        # Numeric pipeline: impute missing values and scale features.
+        numeric_pipeline = Pipeline(
+            [
+                ("imputer", SimpleImputer(strategy="mean")),
+                ("scaler", StandardScaler()),
+            ]
+        )
+
+        # Nominal pipeline: impute and one-hot encode categorical features.
+        nominal_pipeline = Pipeline(
+            [
+                ("imputer", SimpleImputer(strategy="most_frequent")),
+                (
+                    "encoder",
+                    OneHotEncoder(
+                        handle_unknown="ignore", drop="first", sparse_output=True
+                    ),
+                ),
+            ]
+        )
+
+        # Ordinal pipeline: impute and convert ordered categories to integers.
+        ordinal_pipeline = Pipeline(
+            [
+                ("imputer", SimpleImputer(strategy="most_frequent")),
+                (
+                    "encoder",
+                    OrdinalEncoder(
+                        categories=ordinal_order,
+                        handle_unknown="use_encoded_value",
+                        unknown_value=-1,
+                    ),
+                ),
+            ]
+        )
+
+        preprocessing_pipeline = ColumnTransformer(
+            [
+                ("numeric", numeric_pipeline, numeric_features),
+                ("nominal", nominal_pipeline, nominal_features),
+                ("ordinal", ordinal_pipeline, ordinal_features),
+            ]
+        )
+
+        save_object(
+            obj=preprocessing_pipeline,
+            file_path=self.data_transformation_config.preprocessor_obj_file_path,
+        )
+        logging.info("Saved preprocessing pipeline object")
+
+        return preprocessing_pipeline
+
     def initiate_data_transformation(self):
-        """Run ingestion and transform the dataset for modeling.
+        """Run data ingestion and transform datasets for modeling.
+
+        The method reads ingested train and test CSV files, separates the target
+        variable, identifies numeric and categorical columns, fits the
+        preprocessing pipeline on training features, and transforms both train
+        and test feature sets.
 
         Returns:
-            tuple: Transformed training features, training targets,
-                transformed testing features, and testing targets.
+            tuple:
+                X_train_arr (numpy.ndarray): Transformed training feature matrix.
+                y_train_arr (numpy.ndarray): Training target array.
+                X_test_arr (numpy.ndarray): Transformed testing feature matrix.
+                y_test_arr (numpy.ndarray): Testing target array.
+                preprocessing_pipeline (ColumnTransformer): Fitted transformer.
         """
         try:
             logging.info("Entered Data Transformation component")
@@ -49,17 +152,17 @@ class DataTransformation:
             test_data = pd.read_csv(test_data_path)
 
             # Selecting the target variable for the task.
-            y_train = train_data["math_score"]
-            X_train = train_data.drop(columns=["math_score"])
+            y_train_df = train_data["math_score"]
+            X_train_df = train_data.drop(columns=["math_score"])
 
-            y_test = test_data["math_score"]
-            X_test = test_data.drop(columns=["math_score"])
+            y_test_df = test_data["math_score"]
+            X_test_df = test_data.drop(columns=["math_score"])
 
             # Identify numeric and categorical feature columns.
-            numeric_features = X_train.select_dtypes(
+            numeric_features = X_train_df.select_dtypes(
                 exclude=["string", "object"]
             ).columns.tolist()
-            categorical_features = X_train.select_dtypes(
+            categorical_features = X_train_df.select_dtypes(
                 include=["string", "object"]
             ).columns.tolist()
 
@@ -73,60 +176,27 @@ class DataTransformation:
                 "bachelor's degree",
                 "master's degree",
             ]
+            ordinal_order = [ordinal1_education_order]
 
             nominal_features = [
                 col for col in categorical_features if col not in ordinal_features
             ]
 
-            # Numeric pipeline: impute missing values and scale features.
-            numeric_pipeline = Pipeline(
-                [
-                    ("imputer", SimpleImputer(strategy="mean")),
-                    ("scaler", StandardScaler()),
-                ]
+            preprocessing_pipeline = self.get_preprocessing_pipeline(
+                numeric_features, nominal_features, ordinal_features, ordinal_order
             )
 
-            # Nominal pipeline: impute and one-hot encode categorical features.
-            nominal_pipeline = Pipeline(
-                [
-                    ("imputer", SimpleImputer(strategy="most_frequent")),
-                    (
-                        "encoder",
-                        OneHotEncoder(
-                            handle_unknown="ignore", drop="first", sparse_output=True
-                        ),
-                    ),
-                ]
-            )
-
-            # Ordinal pipeline: impute and convert ordered categories to integers.
-            ordinal_pipeline = Pipeline(
-                [
-                    ("imputer", SimpleImputer(strategy="most_frequent")),
-                    (
-                        "encoder",
-                        OrdinalEncoder(
-                            categories=[ordinal1_education_order],
-                            handle_unknown="use_encoded_value",
-                            unknown_value=-1,
-                        ),
-                    ),
-                ]
-            )
-
-            preprocessing_pipeline = ColumnTransformer(
-                [
-                    ("numeric", numeric_pipeline, numeric_features),
-                    ("nominal", nominal_pipeline, nominal_features),
-                    ("ordinal", ordinal_pipeline, ordinal_features),
-                ]
-            )
-
-            X_train = preprocessing_pipeline.fit_transform(X_train)
-            X_test = preprocessing_pipeline.transform(X_test)
+            X_train_arr = preprocessing_pipeline.fit_transform(X_train_df)
+            X_test_arr = preprocessing_pipeline.transform(X_test_df)
 
             logging.info("Data Transformation Completed")
-            return X_train, y_train, X_test, y_test
+            return (
+                X_train_arr,
+                np.array(y_train_df),
+                X_test_arr,
+                np.array(y_test_df),
+                preprocessing_pipeline,
+            )
 
         except Exception as e:
             raise CustomException(e, sys)

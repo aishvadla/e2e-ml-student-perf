@@ -152,11 +152,12 @@ class DataTransformation:
             test_data = pd.read_csv(test_data_path)
 
             # Selecting the target variable for the task.
-            y_train_df = train_data["math_score"]
-            X_train_df = train_data.drop(columns=["math_score"])
+            target_column = "math_score"
+            y_train_df = train_data[target_column]
+            X_train_df = train_data.drop(columns=[target_column])
 
-            y_test_df = test_data["math_score"]
-            X_test_df = test_data.drop(columns=["math_score"])
+            y_test_df = test_data[target_column]
+            X_test_df = test_data.drop(columns=[target_column])
 
             # Identify numeric and categorical feature columns.
             numeric_features = X_train_df.select_dtypes(
@@ -189,12 +190,13 @@ class DataTransformation:
             X_train_arr = preprocessing_pipeline.fit_transform(X_train_df)
             X_test_arr = preprocessing_pipeline.transform(X_test_df)
 
+            train_arr = np.c_[X_train_arr, np.array(y_train_df)]
+            test_arr = np.c_[X_test_arr, np.array(y_test_df)]
+
             logging.info("Data Transformation Completed")
             return (
-                X_train_arr,
-                np.array(y_train_df),
-                X_test_arr,
-                np.array(y_test_df),
+                train_arr,
+                test_arr,
                 preprocessing_pipeline,
             )
 

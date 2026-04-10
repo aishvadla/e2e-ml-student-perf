@@ -189,10 +189,7 @@ class DataTransformation:
             logging.info("Saved preprocessing pipeline object")
 
             logging.info("Data Transformation Completed")
-            return (
-                train_arr,
-                test_arr
-            )
+            return (train_arr, test_arr)
 
         except Exception as e:
             raise CustomException(e, sys)

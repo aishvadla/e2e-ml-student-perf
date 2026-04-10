@@ -35,7 +35,9 @@ class PredictPipeline:
             CustomException: If loading models or making predictions fails.
         """
         try:
-            preprocessor_path = self.data_transformation_config.preprocessor_obj_file_path
+            preprocessor_path = (
+                self.data_transformation_config.preprocessor_obj_file_path
+            )
             model_path = self.model_trainer_config.trained_model_file_path
             preprocessor = load_object(preprocessor_path)
             model = load_object(model_path)

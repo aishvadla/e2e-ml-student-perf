@@ -43,6 +43,7 @@ def save_object(obj, file_path):
     except Exception as e:
         raise CustomException(e, sys)
 
+
 def load_object(file_path):
     """Deserialize and load a saved object from disk.
 
@@ -66,6 +67,7 @@ def load_object(file_path):
             return joblib.load(file_obj)
     except Exception as e:
         raise CustomException(e, sys)
+
 
 def evaluate_models(X_train, y_train, X_test, y_test, models):
     """Evaluate and compare multiple regression models using GridSearchCV.

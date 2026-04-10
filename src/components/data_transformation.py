@@ -116,12 +116,6 @@ class DataTransformation:
             ]
         )
 
-        save_object(
-            obj=preprocessing_pipeline,
-            file_path=self.data_transformation_config.preprocessor_obj_file_path,
-        )
-        logging.info("Saved preprocessing pipeline object")
-
         return preprocessing_pipeline
 
     def initiate_data_transformation(self, train_data_path, test_data_path):
@@ -188,11 +182,16 @@ class DataTransformation:
             train_arr = np.c_[X_train_arr, np.array(y_train_df)]
             test_arr = np.c_[X_test_arr, np.array(y_test_df)]
 
+            save_object(
+                obj=preprocessing_pipeline,
+                file_path=self.data_transformation_config.preprocessor_obj_file_path,
+            )
+            logging.info("Saved preprocessing pipeline object")
+
             logging.info("Data Transformation Completed")
             return (
                 train_arr,
-                test_arr,
-                preprocessing_pipeline,
+                test_arr
             )
 
         except Exception as e:

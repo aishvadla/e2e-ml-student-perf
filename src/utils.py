@@ -43,6 +43,12 @@ def save_object(obj, file_path):
     except Exception as e:
         raise CustomException(e, sys)
 
+def load_object(file_path):
+    try:
+        with open(file_path, "rb") as file_obj:
+            return joblib.load(file_obj)
+    except Exception as e:
+        raise CustomException(e, sys)
 
 def evaluate_models(X_train, y_train, X_test, y_test, models):
     try:
@@ -61,7 +67,7 @@ def evaluate_models(X_train, y_train, X_test, y_test, models):
             model_report[model_name] = test_model_score
 
         logging.info("Completed model evaluation")
-        return model_report
+        return model_report, best_model
 
     except Exception as e:
         raise CustomException(e, sys)

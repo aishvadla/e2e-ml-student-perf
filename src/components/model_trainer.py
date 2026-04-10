@@ -118,7 +118,7 @@ class ModelTrainer:
                 },
             }
 
-            model_report: dict = evaluate_models(
+            model_report, best_model = evaluate_models(
                 X_train=X_train,
                 y_train=y_train,
                 X_test=X_test,
@@ -127,7 +127,6 @@ class ModelTrainer:
             )
 
             best_model_name = max(model_report, key=model_report.get)
-            best_model = models[best_model_name]
             best_model_score = model_report[best_model_name]
 
             if best_model_score < 0.6:
@@ -151,7 +150,7 @@ if __name__ == "__main__":
     train_data_path, test_data_path = di_obj.initiate_data_ingestion()
 
     dt_obj = DataTransformation()
-    train_array, test_array, preprocessor_path = dt_obj.initiate_data_transformation(
+    train_array, test_array = dt_obj.initiate_data_transformation(
         train_data_path, test_data_path
     )
 

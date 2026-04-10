@@ -102,17 +102,43 @@ python -m pip install -e .
 
 ## Usage
 
-### Option 1: Run the Complete Training Pipeline
+### Option 1: Using Flask Web Application
 
-```python
-from src.pipeline.train_pipeline import run_training_pipeline
+A Flask web application provides an easy-to-use interface for training models and making predictions.
 
-run_training_pipeline()
+#### Run the Application
+
+run as a standalone script:
+
+```bash
+python app.py
 ```
 
-### Option 2: Run Components Individually
+The application will be available at `http://localhost:5000`
 
-#### Data Ingestion
+---
+
+### Option 2: Using Python Code
+
+#### 2.1: Run the Complete Training Pipeline
+
+```python
+from src.pipeline.train_pipeline import TrainPipeline
+
+# Create and execute the training pipeline
+pipeline = TrainPipeline()
+pipeline.train()
+```
+
+Alternatively, run as a standalone script:
+
+```bash
+python src/pipeline/train_pipeline.py
+```
+
+#### 2.2: Run Components Individually
+
+##### Data Ingestion
 
 ```python
 from src.components.data_ingestion import DataIngestion
@@ -123,16 +149,16 @@ print(f"Train data: {train_path}")
 print(f"Test data: {test_path}")
 ```
 
-#### Data Transformation
+##### Data Transformation
 
 ```python
 from src.components.data_transformation import DataTransformation
 
 transformation = DataTransformation()
-X_train, y_train, X_test, y_test = transformation.initiate_data_transformation()
+train_array, test_array = transformation.initiate_data_transformation(train_data_path, test_data_path)
 ```
 
-#### Model Training
+##### Model Training
 
 ```python
 from src.components.data_ingestion import DataIngestion
@@ -144,16 +170,13 @@ di = DataIngestion()
 train_path, test_path = di.initiate_data_ingestion()
 
 dt = DataTransformation()
-X_train, y_train, X_test, y_test = dt.initiate_data_transformation()
-
-train_array = np.c_[X_train, y_train]
-test_array = np.c_[X_test, y_test]
+train_array, test_array = dt.initiate_data_transformation(train_path, test_path)
 
 mt = ModelTrainer()
 mt.initiate_model_trainer(train_array, test_array)
 ```
 
-#### Making Predictions
+##### Making Predictions
 
 ```python
 from src.pipeline.predict_pipeline import PredictPipeline, CustomData
@@ -178,6 +201,7 @@ pipeline = PredictPipeline()
 prediction = pipeline.predict(df)
 print(f"Predicted math score: {prediction[0]:.2f}")
 ```
+
 
 ## Models Evaluated
 

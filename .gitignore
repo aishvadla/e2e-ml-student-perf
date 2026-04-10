@@ -1,6 +1,5 @@
 # Model training dump
 catboost_info
-artifacts
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

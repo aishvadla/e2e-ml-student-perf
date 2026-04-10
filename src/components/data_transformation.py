@@ -45,7 +45,6 @@ class DataTransformation:
         The component loads configuration and prepares the ingestion helper.
         """
         self.data_transformation_config = DataTransformationConfig()
-        self.data_ingestion = DataIngestion()
 
     def get_preprocessing_pipeline(
         self, numeric_features, nominal_features, ordinal_features, ordinal_order
@@ -125,7 +124,7 @@ class DataTransformation:
 
         return preprocessing_pipeline
 
-    def initiate_data_transformation(self):
+    def initiate_data_transformation(self, train_data_path, test_data_path):
         """Run data ingestion and transform datasets for modeling.
 
         The method reads ingested train and test CSV files, separates the target
@@ -143,10 +142,6 @@ class DataTransformation:
         """
         try:
             logging.info("Entered Data Transformation component")
-
-            train_data_path, test_data_path = (
-                self.data_ingestion.initiate_data_ingestion()
-            )
 
             train_data = pd.read_csv(train_data_path)
             test_data = pd.read_csv(test_data_path)

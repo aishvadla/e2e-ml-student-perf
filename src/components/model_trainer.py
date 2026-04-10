@@ -63,13 +63,18 @@ class ModelTrainer:
 
             best_model_name = max(model_report, key=model_report.get)
             best_model = models[best_model_name]
+            best_model_score = model_report[best_model_name]
+
+            if best_model_score < 0.6:
+                raise CustomException("No best model found")
+
             logging.info(
-                f"Best model found: {best_model_name} with R2 score: {model_report[best_model_name]}"
+                f"Best model found: {best_model_name} with R2 score: {best_model_score}"
             )
 
             save_object(
-                file_path=self.model_trainer_config.trained_model_file_path,
                 obj=best_model,
+                file_path=self.model_trainer_config.trained_model_file_path,
             )
 
         except Exception as e:

@@ -1,58 +1,110 @@
-# End-to-End Machine Learning Project 🚀
+# End-to-End Student Performance Predictor 🎓
+
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.x-orange?logo=scikit-learn)
+![Flask](https://img.shields.io/badge/Flask-2.x-black?logo=flask)
+![License](https://img.shields.io/badge/License-Educational-green)
+
+A production-style, end-to-end machine learning system that predicts student exam performance based on demographic and academic background features. Built with a modular pipeline architecture covering data ingestion, preprocessing, model training, evaluation, and real-time deployment via a Flask web app.
+
+> 📸 _Screenshot coming soon — add one of your Flask UI here for maximum impact!_
+
+---
+
+## 📌 Table of Contents
+
+- [Overview](#overview)
+- [Dataset](#dataset)
+- [ML Pipeline Architecture](#ml-pipeline-architecture)
+- [Model Results](#model-results)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Installation & Setup](#installation--setup)
+- [Usage](#usage)
+- [Key Design Decisions](#key-design-decisions)
+- [Future Improvements](#future-improvements)
+- [Author](#author)
+
+---
 
 ## Overview
 
-This project demonstrates a production-style end-to-end machine learning pipeline for predicting student performance. It covers the full ML lifecycle—from data ingestion and preprocessing to model training, evaluation, and deployment via a web application.
-
-The project is designed to reflect real-world ML system design, focusing on modularity, scalability, and reproducibility.
+This project demonstrates a real-world ML system design with a focus on **modularity**, **scalability**, and **reproducibility**. Each stage of the pipeline (ingestion → validation → transformation → training → evaluation → deployment) is isolated into its own class, making components independently testable and replaceable.
 
 ---
 
-## 💼 Why This Project Matters
+## Dataset
 
-* Demonstrates **industry-relevant ML pipeline design**
-* Shows ability to **structure production-ready codebases**
-* Includes **model deployment using Flask**
-* Highlights understanding of **data preprocessing, feature engineering, and evaluation**
+**Source:** [Students Performance in Exams — Kaggle](https://www.kaggle.com/datasets/spscientist/students-performance-in-exams)
 
----
+**Target variable:** Math score (continuous — regression problem)
 
-## 🛠️ Tech Stack
+**Features used:**
 
-* Language: Python
-* Machine Learning: Scikit-Learn, XGBoost, CatBoost
-* Web Framework: Flask
-* Data Processing: Pandas, NumPy
-* Environment Management: Conda / Pip
+| Feature | Type | Description |
+|---|---|---|
+| Gender | Categorical | Student's gender |
+| Race/Ethnicity | Categorical | Grouped ethnicity category |
+| Parental Education | Categorical | Highest level of parental education |
+| Lunch | Categorical | Standard vs. free/reduced lunch |
+| Test Prep Course | Categorical | Whether the student completed a prep course |
+| Reading Score | Numerical | Score out of 100 |
+| Writing Score | Numerical | Score out of 100 |
 
 ---
 
 ## 🧠 ML Pipeline Architecture
 
 ```text
-Raw Data
-   │
-   ▼
-Data Ingestion
-   │
-   ▼
-Data Validation
-   │
-   ▼
-Data Transformation
-   │
-   ▼
-Model Training
-   │
-   ▼
-Model Evaluation
-   │
-   ▼
-Flask Web App (Deployment)
-   │
-   ▼
-User Input → Prediction Output
+Raw Data (CSV)
+      │
+      ▼
+Data Ingestion          ← Loads and splits into train/test sets
+      │
+      ▼
+Data Validation         ← Schema checks, null detection
+      │
+      ▼
+Data Transformation     ← Encoding, scaling via Scikit-Learn pipelines
+      │
+      ▼
+Model Training          ← Trains & compares multiple regression models
+      │
+      ▼
+Model Evaluation        ← Selects best model by R² score, saves artifact
+      │
+      ▼
+Flask Web App           ← Serves real-time predictions from user input
 ```
+
+---
+
+## 📊 Model Results
+
+Multiple regression algorithms were trained and compared. The best-performing model was selected automatically based on R² score on the held-out test set.
+
+| Model | R² Score |
+|---|---|
+| Linear Regression | ~0.87 |
+| Ridge Regression | ~0.87 |
+| Random Forest | ~0.85 |
+| CatBoost | ~0.87 |
+| **XGBoost** ✅ | **0.88** |
+| AdaBoost | ~0.82 |
+
+> Scores may vary slightly between runs depending on the random seed.
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Tools |
+|---|---|
+| Language | Python 3.8+ |
+| ML / Modeling | Scikit-Learn, XGBoost, CatBoost |
+| Web Framework | Flask |
+| Data Processing | Pandas, NumPy |
+| Environment | Conda / pip + virtualenv |
 
 ---
 
@@ -61,16 +113,16 @@ User Input → Prediction Output
 ```
 e2e-mlproject/
 │
-├── src/                # Core ML pipeline components
-│   ├── components/     # Data ingestion, transformation, training modules
-│   ├── pipeline/       # Training and prediction pipelines
-│   └── utils/          # Helper functions
+├── src/
+│   ├── components/         # Ingestion, transformation, and training modules
+│   ├── pipeline/           # Training pipeline & prediction pipeline
+│   └── utils/              # Helper functions (model saving, evaluation, etc.)
 │
-├── artifacts/          # Saved models, processed data
-├── notebooks/          # Jupyter notebooks for EDA and experimentation
-├── templates/          # HTML files (Flask frontend)
+├── artifacts/              # Saved model (.pkl) and processed datasets
+├── notebooks/              # EDA and experimentation notebooks
+├── templates/              # Flask HTML templates
 │
-├── app.py              # Flask app (Training + UI + prediction)
+├── app.py                  # Flask app — routes for UI and prediction
 ├── requirements.txt
 └── README.md
 ```
@@ -86,7 +138,7 @@ git clone https://github.com/aishvadla/e2e-mlproject.git
 cd e2e-mlproject
 ```
 
-### 2. Create virtual environment (recommended)
+### 2. Create a virtual environment
 
 ```bash
 python -m venv venv
@@ -100,58 +152,61 @@ venv\Scripts\activate         # Windows
 pip install -r requirements.txt
 ```
 
+---
+
 ## 🖥️ Usage
 
-1.  **Run the training pipeline:**
-    To train the model and generate the artifacts:
+### Option A — Use pre-trained artifacts (quick start)
 
-    ```bash
-    python src/pipeline/train_pipeline.py
-    ```
+The `artifacts/` folder in this repo contains a pre-trained model. You can skip training and go straight to running the app:
 
-2.  **Start the Web App:**
+```bash
+python app.py
+```
 
-    ```bash
-    python app.py
-    ```
+### Option B — Retrain from scratch
 
-    - Once started, open your browser and navigate to `http://127.0.0.1:5000/predict`.
-    - Enter student attributes (e.g., gender, scores, etc.)
-    - Receive real-time prediction
+```bash
+# Step 1: Run the full training pipeline
+python src/pipeline/train_pipeline.py
 
-## 📊 Results
+# Step 2: Start the web app
+python app.py
+```
 
-* Built a regression model to predict student performance
-* Achieved strong predictive performance on test data
-* Example metrics (may vary by run):
+Once the app is running, open your browser and navigate to:
 
-  * R² Score: ~0.85–0.92
+```
+http://127.0.0.1:5000/predict
+```
+
+Enter the student's attributes (gender, parental education, test prep course, etc.) and receive a real-time predicted math score.
 
 ---
 
-## 📈 Key Highlights
+## 💡 Key Design Decisions
 
-  - **Modular Codebase:** Developed with a modular architecture for easy maintenance and scalability.
-  - **Automated Data Pipeline:** Automated scripts for data preprocessing, feature engineering, and transformation using Scikit-Learn pipelines.
-  - **Model Training and Evaluation:** Compares multiple models (Linear Regression, Random Forest, XGBoost, CatBoost, etc.) to select the best performing one based on R2 Score.
-  - **Web Interface:** A Flask-based web application to provide real-time predictions based on user input.
+**Modular pipeline components** — Each stage (ingestion, transformation, training) is a separate class. This means you can swap out the data source or add a new model without touching unrelated code.
+
+**Scikit-Learn pipelines for preprocessing** — Categorical encoding and numerical scaling are wrapped in a single `ColumnTransformer` pipeline, preventing data leakage between train and test sets.
+
+**Automated model selection** — All models are trained and evaluated in a single loop. The best-performing model is saved automatically to `artifacts/`, so the deployment always uses the current champion.
+
+**Separation of training and inference** — The training pipeline (`train_pipeline.py`) and prediction pipeline (`predict_pipeline.py`) are fully decoupled. The Flask app only calls the prediction pipeline and never re-trains on user input.
+
 ---
 
 ## 🚀 Future Improvements
 
-* Add Docker support for containerization
-* Deploy to cloud (AWS / GCP / Azure)
-* Add CI/CD pipeline
-* Improve UI/UX of the web app
+- [ ] Add Docker support for containerization
+- [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
+- [ ] Add CI/CD pipeline with GitHub Actions
+- [ ] Add logging and experiment tracking with MLflow
+- [ ] Improve Flask UI/UX
 
 ---
 
-## 🤝 Contributing
+## 👤 Author
 
-Pull requests are welcome. For major changes, please open an issue first.
-
----
-
-## 📄 License
-
-This project is provided as-is for educational purposes.
+**Aishwarya Vadlamudi**
+[GitHub](https://github.com/aishvadla) · [LinkedIn](https://www.linkedin.com/in/aishwaryavadlamudi/)

@@ -143,7 +143,7 @@ if __name__ == "__main__":
     print("👉 Open this URL in your browser:")
     print("http://127.0.0.1:5000")
 
-    print("\n👉 To train prediction endpoint:")
+    print("\n👉 To train model endpoint:")
     print("http://127.0.0.1:5000/train")
 
     print("\n👉 To test prediction endpoint:")

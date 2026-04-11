@@ -81,18 +81,23 @@ Flask Web App           ← Serves real-time predictions from user input
 
 ## 📊 Model Results
 
-Multiple regression algorithms were trained and compared. The best-performing model was selected automatically based on R² score on the held-out test set.
+Multiple regression algorithms were evaluated and compared on the held-out test set. Below are the actual R² scores achieved:
 
 | Model | R² Score |
 |---|---|
-| Linear Regression | ~0.87 |
-| Ridge Regression | ~0.87 |
-| Random Forest | ~0.85 |
-| CatBoost | ~0.87 |
-| **XGBoost** ✅ | **0.88** |
-| AdaBoost | ~0.82 |
+| **Ridge Regression** ✅ | **0.88** |
+| **Linear Regression** ✅ | **0.88** |
+| Gradient Boosting | 0.87 |
+| AdaBoost | 0.85 |
+| CatBoost | 0.85 |
+| Random Forest | 0.85 |
+| XGBoost | 0.85 |
+| Lasso | 0.82 |
+| KNN | 0.77 |
+| SVR | 0.74 |
+| Decision Tree | 0.68 |
 
-> Scores may vary slightly between runs depending on the random seed.
+**Best Performers:** Ridge and Linear Regression achieved virtually identical performance (R² = 0.8816), with the pipeline automatically selecting Ridge for deployment due to superior regularization properties. The results demonstrate that simpler models often outperform complex ensemble methods when features are properly engineered.
 
 ---
 

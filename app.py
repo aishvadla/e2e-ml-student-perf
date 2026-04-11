@@ -48,22 +48,42 @@ def predict_datapoint():
              or the form for GET.
     """
     if request.method == "GET":
-        return render_template("home.html", results=None)
+        return render_template("home.html", results=None, features=None)
     else:
+        # Capture form data
+        gender = request.form.get("gender")
+        ethnicity = request.form.get("ethnicity")
+        parental_education = request.form.get("parental_level_of_education")
+        lunch = request.form.get("lunch")
+        test_prep = request.form.get("test_preparation_course")
+        reading_score = float(request.form.get("writing_score"))
+        writing_score = float(request.form.get("reading_score"))
+        
+        # Create features dictionary for display
+        features = {
+            "Gender": gender.capitalize(),
+            "Ethnicity": ethnicity,
+            "Parental Education": parental_education.title(),
+            "Lunch Type": lunch.capitalize(),
+            "Test Preparation": test_prep.capitalize(),
+            "Reading Score": reading_score,
+            "Writing Score": writing_score,
+        }
+        
         data = CustomData(
-            gender=request.form.get("gender"),
-            race_ethnicity=request.form.get("ethnicity"),
-            parental_level_of_education=request.form.get("parental_level_of_education"),
-            lunch=request.form.get("lunch"),
-            test_preparation_course=request.form.get("test_preparation_course"),
-            reading_score=float(request.form.get("writing_score")),
-            writing_score=float(request.form.get("reading_score")),
+            gender=gender,
+            race_ethnicity=ethnicity,
+            parental_level_of_education=parental_education,
+            lunch=lunch,
+            test_preparation_course=test_prep,
+            reading_score=reading_score,
+            writing_score=writing_score,
         )
 
         data_df = data.get_data_as_data_frame()
         prediction_pipeline = PredictPipeline()
         results = prediction_pipeline.predict(data_df)
-        return render_template("home.html", results=results[0])
+        return render_template("home.html", results=results[0], features=features)
 
 
 @app.route("/train", methods=["GET", "POST"])

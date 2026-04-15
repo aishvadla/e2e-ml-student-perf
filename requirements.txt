@@ -7,4 +7,5 @@ catboost
 xgboost
 black
 flask
+gunicorn
 -e .

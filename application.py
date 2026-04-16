@@ -24,6 +24,7 @@ from src.pipeline.train_pipeline import TrainPipeline
 
 application = Flask(__name__)
 
+
 @application.route("/")
 def index():
     """
@@ -58,7 +59,7 @@ def predict_datapoint():
         test_prep = request.form.get("test_preparation_course")
         reading_score = float(request.form.get("writing_score"))
         writing_score = float(request.form.get("reading_score"))
-        
+
         # Create features dictionary for display
         features = {
             "Gender": gender.capitalize(),
@@ -69,7 +70,7 @@ def predict_datapoint():
             "Reading Score": reading_score,
             "Writing Score": writing_score,
         }
-        
+
         data = CustomData(
             gender=gender,
             race_ethnicity=ethnicity,

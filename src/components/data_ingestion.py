@@ -23,6 +23,9 @@ class DataIngestionConfig:
     raw_data_path: str = os.path.join("artifacts", "raw_data.csv")
     train_data_path: str = os.path.join("artifacts", "train.csv")
     test_data_path: str = os.path.join("artifacts", "test.csv")
+    dataset_path = os.path.join(
+        os.path.dirname(__file__), "../../notebook/data/student.csv"
+    )
 
 
 class DataIngestion:
@@ -47,10 +50,7 @@ class DataIngestion:
         """
         logging.info("Entered the data ingestion component")
         try:
-            dataset_path = os.path.join(
-                os.path.dirname(__file__), "../../notebook/data/student.csv"
-            )
-            df = pd.read_csv(dataset_path)
+            df = pd.read_csv(self.ingestion_config.dataset_path)
             logging.info("Read the dataset as dataframe")
 
             os.makedirs(

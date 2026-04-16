@@ -163,12 +163,12 @@ def internal_error(error):
 
 if __name__ == "__main__":
     print("👉 Open this URL in your browser:")
-    print("http://127.0.0.1:5000")
+    print("http://127.0.0.1:8080")
 
     print("\n👉 To train model endpoint:")
-    print("http://127.0.0.1:5000/train")
+    print("http://127.0.0.1:8080/train")
 
     print("\n👉 To test prediction endpoint:")
-    print("http://127.0.0.1:5000/predict")
+    print("http://127.0.0.1:8080/predict")
 
-    app.run(host="0.0.0.0", debug=False)
+    app.run(host="0.0.0.0", port=8080, debug=False)

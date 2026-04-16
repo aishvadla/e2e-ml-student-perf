@@ -249,9 +249,11 @@ Enter the student's attributes (gender, parental education, test prep course, et
 ## 🚀 Future Improvements
 
 - [x] Add Docker support for containerization
+- [ ] Add unit tests, integration tests and validation tests
 - [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
 - [ ] Add CI/CD pipeline with GitHub Actions
 - [ ] Add logging and experiment tracking with MLflow
+- [ ] Model Monitoring, Logging and Latency
 - [x] Improve Flask UI/UX
 
 ---

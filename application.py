@@ -24,9 +24,7 @@ from src.pipeline.train_pipeline import TrainPipeline
 
 application = Flask(__name__)
 
-app = application
-
-@app.route("/")
+@application.route("/")
 def index():
     """
     Render the home page.
@@ -37,7 +35,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/predict", methods=["GET", "POST"])
+@application.route("/predict", methods=["GET", "POST"])
 def predict_datapoint():
     """
     Handle prediction requests.
@@ -88,7 +86,7 @@ def predict_datapoint():
         return render_template("home.html", results=results[0], features=features)
 
 
-@app.route("/train", methods=["GET", "POST"])
+@application.route("/train", methods=["GET", "POST"])
 def train_model():
     """
     Train the machine learning model.
@@ -106,7 +104,7 @@ def train_model():
         return {"error": str(e)}, 500
 
 
-@app.route("/health")
+@application.route("/health")
 def health():
     """
     Health check endpoint.
@@ -119,7 +117,7 @@ def health():
     return {"status": "healthy"}
 
 
-@app.errorhandler(404)
+@application.errorhandler(404)
 def not_found(error):
     """
     Handle 404 Not Found errors.
@@ -133,7 +131,7 @@ def not_found(error):
     return {"error": "Not found"}, 404
 
 
-@app.errorhandler(405)
+@application.errorhandler(405)
 def method_not_allowed(error):
     """
     Handle 405 Method Not Allowed errors.
@@ -147,7 +145,7 @@ def method_not_allowed(error):
     return {"error": "Method not allowed"}, 405
 
 
-@app.errorhandler(500)
+@application.errorhandler(500)
 def internal_error(error):
     """
     Handle 500 Internal Server Error.
@@ -165,10 +163,4 @@ if __name__ == "__main__":
     print("👉 Open this URL in your browser:")
     print("http://127.0.0.1:8080")
 
-    print("\n👉 To train model endpoint:")
-    print("http://127.0.0.1:8080/train")
-
-    print("\n👉 To test prediction endpoint:")
-    print("http://127.0.0.1:8080/predict")
-
-    app.run(host="0.0.0.0", port=8080, debug=False)
+    application.run(host="0.0.0.0", port=8080, debug=False)

@@ -23,5 +23,4 @@ EXPOSE 8080
 
 # Use Gunicorn as the production web server
 # Matches your application.py naming convention
-# CMD ["gunicorn", "--bind", "0.0.0.0:8080", "application:application"]
-CMD ["python3", "application.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "application:application"]

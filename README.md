@@ -20,6 +20,7 @@ A production-style, end-to-end machine learning system that predicts student exa
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Installation & Setup](#installation--setup)
+- [Docker Support](#docker-support)
 - [Usage](#usage)
 - [Key Design Decisions](#key-design-decisions)
 - [Future Improvements](#future-improvements)
@@ -159,6 +160,30 @@ pip install -r requirements.txt
 
 ---
 
+## 🐳 Docker Support
+
+This project includes Docker support for easy containerization and deployment.
+
+### Prerequisites
+
+- Docker installed on your system
+
+### Build the Docker Image
+
+```bash
+docker build -t student-performance-predictor .
+```
+
+### Run the Application with Docker
+
+```bash
+docker run -p 8080:8080 student-performance-predictor
+```
+
+The application will be available at `http://localhost:8080/`.
+
+---
+
 ## 🖥️ Usage
 
 ### Option A — Use pre-trained artifacts (quick start)
@@ -166,7 +191,7 @@ pip install -r requirements.txt
 The `artifacts/` folder in this repo contains a pre-trained model. You can skip training and go straight to running the app:
 
 ```bash
-python app.py
+python application.py
 ```
 
 ### Option B — Retrain from scratch
@@ -176,13 +201,13 @@ python app.py
 python src/pipeline/train_pipeline.py
 
 # Step 2: Start the web app
-python app.py
+python application.py
 ```
 
 Once the app is running, open your browser and navigate to:
 
 ```
-http://127.0.0.1:5000/predict
+http://localhost:8080/
 ```
 
 Enter the student's attributes (gender, parental education, test prep course, etc.) and receive a real-time predicted math score.
@@ -203,12 +228,11 @@ Enter the student's attributes (gender, parental education, test prep course, et
 
 ## 🚀 Future Improvements
 
-- [ ] Add Docker support for containerization
-- [ ] Check gunicorn support in docker containerization
+- [x] Add Docker support for containerization
 - [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
 - [ ] Add CI/CD pipeline with GitHub Actions
 - [ ] Add logging and experiment tracking with MLflow
-- [ ] Improve Flask UI/UX
+- [x] Improve Flask UI/UX
 
 ---
 

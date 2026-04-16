@@ -86,24 +86,6 @@ def predict_datapoint():
         return render_template("home.html", results=results[0], features=features)
 
 
-@application.route("/train", methods=["GET", "POST"])
-def train_model():
-    """
-    Train the machine learning model.
-
-    Initiates the training pipeline to train the model on the dataset.
-
-    Returns:
-        dict: JSON response with training status message.
-    """
-    try:
-        train_pipeline = TrainPipeline()
-        train_pipeline.train()
-        return {"message": "Model trained successfully"}
-    except Exception as e:
-        return {"error": str(e)}, 500
-
-
 @application.route("/health")
 def health():
     """
@@ -161,6 +143,6 @@ def internal_error(error):
 
 if __name__ == "__main__":
     print("👉 Open this URL in your browser:")
-    print("http://127.0.0.1:8080")
+    print("http://localhost:8080/")
 
     application.run(host="0.0.0.0", port=8080, debug=False)

@@ -172,18 +172,18 @@ class DataTransformation:
                 col for col in categorical_features if col not in ordinal_features
             ]
 
-            preprocessing_pipeline = self.get_preprocessing_pipeline(
+            self.preprocessing_pipeline = self.get_preprocessing_pipeline(
                 numeric_features, nominal_features, ordinal_features, ordinal_order
             )
 
-            X_train_arr = preprocessing_pipeline.fit_transform(X_train_df)
-            X_test_arr = preprocessing_pipeline.transform(X_test_df)
+            X_train_arr = self.preprocessing_pipeline.fit_transform(X_train_df)
+            X_test_arr = self.preprocessing_pipeline.transform(X_test_df)
 
             train_arr = np.c_[X_train_arr, np.array(y_train_df)]
             test_arr = np.c_[X_test_arr, np.array(y_test_df)]
 
             save_object(
-                obj=preprocessing_pipeline,
+                obj=self.preprocessing_pipeline,
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
             )
             logging.info("Saved preprocessing pipeline object")

@@ -170,21 +170,30 @@ pip install -r requirements.txt
 <a id="docker-support"></a>
 ## 🐳 Docker Support
 
-This project includes Docker support for easy containerization and deployment.
+This project includes Docker support for easy containerization and deployment. A pre-built Docker image is available on Docker Hub.
 
 ### Prerequisites
 
 - Docker installed on your system
 
-### Build the Docker Image
+### Option A — Pull the Pre-built Image from Docker Hub
 
 ```bash
-docker build -t student-performance-predictor .
+docker pull avadlamu/ml-app-student-perf:latest
 ```
 
 ### Run the Application with Docker
 
 ```bash
+docker run -p 8080:8080 avadlamu/ml-app-student-perf:latest
+```
+
+### Option B — Build the Image Locally (Alternative)
+
+If you prefer to build the image yourself:
+
+```bash
+docker build -t student-performance-predictor .
 docker run -p 8080:8080 student-performance-predictor
 ```
 

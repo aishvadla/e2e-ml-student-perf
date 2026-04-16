@@ -28,12 +28,14 @@ A production-style, end-to-end machine learning system that predicts student exa
 
 ---
 
+<a id="overview"></a>
 ## Overview
 
 This project demonstrates a real-world ML system design with a focus on **modularity**, **scalability**, and **reproducibility**. Each stage of the pipeline (ingestion → validation → transformation → training → evaluation → deployment) is isolated into its own class, making components independently testable and replaceable.
 
 ---
 
+<a id="dataset"></a>
 ## Dataset
 
 **Source:** [Students Performance in Exams — Kaggle](https://www.kaggle.com/datasets/spscientist/students-performance-in-exams)
@@ -54,6 +56,7 @@ This project demonstrates a real-world ML system design with a focus on **modula
 
 ---
 
+<a id="ml-pipeline-architecture"></a>
 ## 🧠 ML Pipeline Architecture
 
 ```text
@@ -80,6 +83,7 @@ Flask Web App           ← Serves real-time predictions from user input
 
 ---
 
+<a id="model-results"></a>
 ## 📊 Model Results
 
 Multiple regression algorithms were evaluated and compared on the held-out test set. Below are the actual R² scores achieved:
@@ -102,6 +106,7 @@ Multiple regression algorithms were evaluated and compared on the held-out test 
 
 ---
 
+<a id="tech-stack"></a>
 ## 🛠️ Tech Stack
 
 | Category | Tools |
@@ -114,6 +119,7 @@ Multiple regression algorithms were evaluated and compared on the held-out test 
 
 ---
 
+<a id="project-structure"></a>
 ## 📂 Project Structure
 
 ```
@@ -135,6 +141,7 @@ e2e-mlproject/
 
 ---
 
+<a id="installation--setup"></a>
 ## ⚙️ Installation & Setup
 
 ### 1. Clone the repository
@@ -160,6 +167,7 @@ pip install -r requirements.txt
 
 ---
 
+<a id="docker-support"></a>
 ## 🐳 Docker Support
 
 This project includes Docker support for easy containerization and deployment.
@@ -184,6 +192,7 @@ The application will be available at `http://localhost:8080/`.
 
 ---
 
+<a id="usage"></a>
 ## 🖥️ Usage
 
 ### Option A — Use pre-trained artifacts (quick start)
@@ -214,6 +223,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 
 ---
 
+<a id="key-design-decisions"></a>
 ## 💡 Key Design Decisions
 
 **Modular pipeline components** — Each stage (ingestion, transformation, training) is a separate class. This means you can swap out the data source or add a new model without touching unrelated code.
@@ -226,6 +236,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 
 ---
 
+<a id="future-improvements"></a>
 ## 🚀 Future Improvements
 
 - [x] Add Docker support for containerization
@@ -236,6 +247,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 
 ---
 
+<a id="author"></a>
 ## 👤 Author
 
 **Aishwarya Vadlamudi**

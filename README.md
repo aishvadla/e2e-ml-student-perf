@@ -204,6 +204,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 ## 🚀 Future Improvements
 
 - [ ] Add Docker support for containerization
+- [ ] Check gunicorn support in docker containerization
 - [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
 - [ ] Add CI/CD pipeline with GitHub Actions
 - [ ] Add logging and experiment tracking with MLflow

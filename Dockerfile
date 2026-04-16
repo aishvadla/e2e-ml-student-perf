@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy only requirements first to leverage Docker cache
-COPY . .
+COPY requirements.txt .
 
 # Install dependencies with no-cache to save space
 RUN pip install --no-cache-dir -r requirements.txt
@@ -23,4 +23,5 @@ EXPOSE 8080
 
 # Use Gunicorn as the production web server
 # Matches your application.py naming convention
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "application:application"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:8080", "application:application"]
+CMD ["python3", "application.py"]

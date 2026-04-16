@@ -5,9 +5,7 @@ import pandas as pd
 from src.components.data_ingestion import DataIngestion
 
 
-def test_initiate_data_ingestion_writes_split_files(
-    raw_csv, sample_df, tmp_path
-):
+def test_initiate_data_ingestion_writes_split_files(raw_csv, sample_df, tmp_path):
 
     ingestion = DataIngestion(test_size=0.5, random_state=42)
     ingestion.ingestion_config.dataset_path = raw_csv

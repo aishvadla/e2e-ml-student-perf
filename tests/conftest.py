@@ -1,7 +1,6 @@
 import pytest
 import pandas as pd
 
-
 SAMPLE_CSV_CONTENT = """\
 gender,race_ethnicity,parental_level_of_education,lunch,test_preparation_course,math_score,reading_score,writing_score
 female,group B,bachelor's degree,standard,none,72,72,74
@@ -18,6 +17,7 @@ def raw_csv(tmp_path) -> str:
     csv_path = tmp_path / "stud.csv"
     csv_path.write_text(SAMPLE_CSV_CONTENT)
     return str(csv_path)
+
 
 @pytest.fixture
 def sample_df(raw_csv):

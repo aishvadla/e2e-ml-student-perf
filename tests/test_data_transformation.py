@@ -6,9 +6,7 @@ from src.components.data_transformation import DataTransformation
 from src.utils import load_object
 
 
-def test_initiate_data_transformation_produces_transformed_arrays(
-    sample_df, tmp_path
-):
+def test_initiate_data_transformation_produces_transformed_arrays(sample_df, tmp_path):
     train_csv = tmp_path / "train.csv"
     test_csv = tmp_path / "test.csv"
 
@@ -31,14 +29,18 @@ def test_initiate_data_transformation_produces_transformed_arrays(
 
     # Verify that the target was preserved in the last column
     assert np.array_equal(train_arr[:, -1], sample_df["math_score"].to_numpy())
-    assert os.path.exists(transformer.data_transformation_config.preprocessor_obj_file_path), "preprocessor pkl file is not generated"
+    assert os.path.exists(
+        transformer.data_transformation_config.preprocessor_obj_file_path
+    ), "preprocessor pkl file is not generated"
 
-    preprocessor = load_object(transformer.data_transformation_config.preprocessor_obj_file_path)
+    preprocessor = load_object(
+        transformer.data_transformation_config.preprocessor_obj_file_path
+    )
     assert hasattr(preprocessor, "transform")
 
 
 def test_get_preprocessing_pipeline_has_expected_components(sample_df, tmp_path):
-    
+
     train_csv = tmp_path / "train.csv"
     test_csv = tmp_path / "test.csv"
 
@@ -50,9 +52,7 @@ def test_get_preprocessing_pipeline_has_expected_components(sample_df, tmp_path)
         tmp_path / "preprocessor.pkl"
     )
 
-    transformer.initiate_data_transformation(
-        str(train_csv), str(test_csv)
-    )
+    transformer.initiate_data_transformation(str(train_csv), str(test_csv))
 
     numeric_features = ["reading_score", "writing_score"]
     nominal_features = ["gender", "race_ethnicity", "lunch", "test_preparation_course"]

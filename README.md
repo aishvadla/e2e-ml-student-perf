@@ -123,7 +123,7 @@ Multiple regression algorithms were evaluated and compared on the held-out test 
 ## 📂 Project Structure
 
 ```
-e2e-mlproject/
+e2e-ml-student-perf/
 │
 ├── src/
 │   ├── components/         # Ingestion, transformation, and training modules
@@ -147,8 +147,8 @@ e2e-mlproject/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/aishvadla/e2e-mlproject.git
-cd e2e-mlproject
+git clone https://github.com/aishvadla/e2e-ml-student-perf.git
+cd e2e-ml-student-perf
 ```
 
 ### 2. Create a virtual environment

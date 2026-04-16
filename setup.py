@@ -30,7 +30,7 @@ def get_requirements(file_path: str) -> list[str]:
 
 
 setup(
-    name="e2e_mlproject",
+    name="e2e-ml-student-perf",
     version="0.0.1",
     author="Aish",
     packages=find_packages(),

@@ -10,8 +10,11 @@
 
 A production-grade, end-to-end machine learning system that predicts student exam performance from demographic and academic features. The project covers the full ML lifecycle — data ingestion, validation, preprocessing, model training, automated selection, and real-time inference — deployed as a containerized Flask web application on AWS.
 
-## 🚀 Live Demo
-**Access the live application here:** [Student Performance Predictor on AWS](http://Student-performance-app-env.eba-xfsmknai.us-west-2.elasticbeanstalk.com/)
+## 🚀 Demo & Deployment
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/523d91a6-4dd8-461f-b2f3-7a7dec4d7ad3" width="750" alt="Application Demo" />
+</p>
 
 ---
 

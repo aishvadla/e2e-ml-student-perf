@@ -171,7 +171,7 @@ pip install -r requirements.txt
 <a id="docker-support"></a>
 ## 🐳 Docker Support
 
-This project includes Docker support for easy containerization and deployment. A pre-built Docker image is available on Docker Hub.
+This project includes Docker support for easy containerization and deployment. A pre-built Docker image is published automatically to Docker Hub via GitHub Actions.
 
 ### Prerequisites
 
@@ -279,7 +279,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 - [x] Add Docker support for containerization
 - [x] Add unit tests, integration tests and validation tests
 - [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
-- [ ] Add CI/CD pipeline with GitHub Actions
+- [x] Add CI/CD pipeline with GitHub Actions
 - [ ] Add logging and experiment tracking with MLflow
 - [ ] Model Monitoring, Logging and Latency
 - [x] Improve Flask UI/UX

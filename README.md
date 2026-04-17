@@ -31,6 +31,7 @@ A production-grade, end-to-end machine learning system that predicts student exa
 - [Testing & Quality Assurance](#testing--quality-assurance)
 - [Key Design Decisions](#key-design-decisions)
 - [Roadmap](#roadmap)
+- [Quality Assurance & System Health](#️-quality-assurance--system-health)
 - [Author](#author)
 
 ---
@@ -238,8 +239,8 @@ The CI/CD workflow ensures every change is validated before reaching production.
 
 ---
 
-<a id="testing--quality-assurance"></a>
-## 🧪 Testing & Quality Assurance
+<a id="testing"></a>
+## 🧪 Testing
 
 To ensure the reliability of the ML pipeline, this project maintains a high standard of automated testing.
 
@@ -288,6 +289,18 @@ python -m pytest --cov=src tests/
 - [ ] Experiment tracking with MLflow
 - [ ] Model performance monitoring and drift detection
 - [ ] Structured logging and latency instrumentation
+
+---
+
+<a id="quality-assurance--system-health"></a>
+## 🛡️ Quality Assurance & System Health
+Beyond functionality, this project adheres to industry-standard reliability metrics.
+
+| CI/CD Pipeline Status | Test Coverage (93%) | AWS Environment Health |
+| :---: | :---: | :---: |
+| <img src="https://github.com/user-attachments/assets/6edaff3b-f1df-4645-bfbf-49c4ed5c2501" width="300"> | <img src="https://github.com/user-attachments/assets/07f3954f-9666-4b01-805c-42c889c2329b" width="300"> | <img src="https://github.com/user-attachments/assets/4fc0fdcc-33e1-45ee-af2f-f4f7fbd0dde5" width="300"> |
+
+> **Note:** These screenshots represent the automated verification performed on every commit to the `main` branch.
 
 ---
 

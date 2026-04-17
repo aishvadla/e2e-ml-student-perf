@@ -3,7 +3,10 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.x-orange?logo=scikit-learn)
 ![Flask](https://img.shields.io/badge/Flask-2.x-black?logo=flask)
-![License](https://img.shields.io/badge/License-Educational-green)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)](https://hub.docker.com/r/avadlamu/ml-app-student-perf)
+[![CI/CD](https://img.shields.io/badge/CI/CD-GitHub--Actions-2088FF?logo=github-actions)](https://github.com/aishvadla/e2e-ml-student-perf/actions)
+[![AWS](https://img.shields.io/badge/AWS-Elastic--Beanstalk-FF9900?logo=amazon-aws)](https://github.com/aishvadla/e2e-ml-student-perf)
+[![Coverage](https://img.shields.io/badge/Coverage-93%25-brightgreen)](https://github.com/aishvadla/e2e-ml-student-perf)
 
 A production-style, end-to-end machine learning system that predicts student exam performance based on demographic and academic background features. Built with a modular pipeline architecture covering data ingestion, preprocessing, model training, evaluation, and real-time deployment via a Flask web app.
 
@@ -116,6 +119,9 @@ Multiple regression algorithms were evaluated and compared on the held-out test 
 | ML / Modeling | Scikit-Learn, XGBoost, CatBoost |
 | Web Framework | Flask |
 | Data Processing | Pandas, NumPy |
+| Containerization | Docker |
+| CI/CD | GitHub Actions |
+| Cloud Deployment | AWS |
 | Environment | Conda / pip + virtualenv |
 
 ---
@@ -171,7 +177,7 @@ pip install -r requirements.txt
 <a id="docker-support"></a>
 ## 🐳 Docker Support
 
-This project includes Docker support for easy containerization and deployment. A pre-built Docker image is published automatically to Docker Hub via GitHub Actions.
+This project includes Docker support for easy containerization and deployment. A GitHub Actions workflow now builds and pushes the Docker image to Docker Hub automatically on each push to `main`.
 
 ### Prerequisites
 
@@ -199,6 +205,21 @@ docker run -p 8080:8080 student-performance-predictor
 ```
 
 The application will be available at `http://localhost:8080/`.
+
+---
+
+<a id="ci-cd"></a>
+## 🔁 CI/CD
+
+This repository now includes a GitHub Actions pipeline that:
+
+- runs unit and integration tests with `pytest`
+- validates application dependencies
+- builds the Docker image
+- pushes the image to Docker Hub
+- deploys the container to AWS automatically on `main`
+
+The CI/CD workflow ensures every change is tested and the latest container is available in production.
 
 ---
 
@@ -278,7 +299,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 
 - [x] Add Docker support for containerization
 - [x] Add unit tests, integration tests and validation tests
-- [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
+- [x] Deploy to cloud via AWS
 - [x] Add CI/CD pipeline with GitHub Actions
 - [ ] Add logging and experiment tracking with MLflow
 - [ ] Model Monitoring, Logging and Latency

@@ -8,81 +8,69 @@
 [![AWS](https://img.shields.io/badge/AWS-Elastic--Beanstalk-FF9900?logo=amazon-aws)](https://github.com/aishvadla/e2e-ml-student-perf)
 [![Coverage](https://img.shields.io/badge/Coverage-93%25-brightgreen)](https://github.com/aishvadla/e2e-ml-student-perf)
 
-A production-style, end-to-end machine learning system that predicts student exam performance based on demographic and academic background features. Built with a modular pipeline architecture covering data ingestion, preprocessing, model training, evaluation, and real-time deployment via a Flask web app.
+A production-grade, end-to-end machine learning system that predicts student exam performance from demographic and academic features. The project covers the full ML lifecycle — data ingestion, validation, preprocessing, model training, automated selection, and real-time inference — deployed as a containerized Flask web application on AWS.
 
-> 📸 _Screenshot coming soon — add one of your Flask UI here for maximum impact!_
+## 🚀 Live Demo
+**Access the live application here:** [Student Performance Predictor on AWS](http://Student-performance-app-env.eba-xfsmknai.us-west-2.elasticbeanstalk.com/)
 
 ---
 
 ## 📌 Table of Contents
 
-- [Overview](#overview)
-- [Dataset](#dataset)
+- [Highlights](#highlights)
 - [ML Pipeline Architecture](#ml-pipeline-architecture)
 - [Model Results](#model-results)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Installation & Setup](#installation--setup)
+- [Getting Started](#getting-started)
 - [Docker Support](#docker-support)
+- [CI/CD Pipeline](#ci-cd-pipeline)
 - [Testing & Quality Assurance](#testing--quality-assurance)
-- [Usage](#usage)
 - [Key Design Decisions](#key-design-decisions)
-- [Future Improvements](#future-improvements)
+- [Roadmap](#roadmap)
 - [Author](#author)
 
 ---
 
-<a id="overview"></a>
-## Overview
+<a id="highlights"></a>
+## ⭐ Highlights
 
-This project demonstrates a real-world ML system design with a focus on **modularity**, **scalability**, and **reproducibility**. Each stage of the pipeline (ingestion → validation → transformation → training → evaluation → deployment) is isolated into its own class, making components independently testable and replaceable.
-
----
-
-<a id="dataset"></a>
-## Dataset
-
-**Source:** [Students Performance in Exams — Kaggle](https://www.kaggle.com/datasets/spscientist/students-performance-in-exams)
-
-**Target variable:** Math score (continuous — regression problem)
-
-**Features used:**
-
-| Feature | Type | Description |
-|---|---|---|
-| Gender | Categorical | Student's gender |
-| Race/Ethnicity | Categorical | Grouped ethnicity category |
-| Parental Education | Categorical | Highest level of parental education |
-| Lunch | Categorical | Standard vs. free/reduced lunch |
-| Test Prep Course | Categorical | Whether the student completed a prep course |
-| Reading Score | Numerical | Score out of 100 |
-| Writing Score | Numerical | Score out of 100 |
+- **93% test coverage** across unit and integration tests using `pytest`
+- **11 regression models** benchmarked; best model auto-selected and saved to artifacts
+- **Fully containerized** — Docker image published to Docker Hub and deployed on AWS Elastic Beanstalk
+- **Automated CI/CD** via GitHub Actions: test → build → push → deploy on every push to `main`
+- **Zero data leakage** enforced through Scikit-Learn `ColumnTransformer` pipelines
 
 ---
 
 <a id="ml-pipeline-architecture"></a>
 ## 🧠 ML Pipeline Architecture
 
+Each stage of the pipeline is encapsulated in its own class, making components independently testable and replaceable.
+
 ```text
 Raw Data (CSV)
       │
       ▼
-Data Ingestion          ← Loads and splits into train/test sets
+Data Ingestion          ← Loads data; produces train/test splits
       │
       ▼
 Data Validation         ← Schema checks, null detection
       │
       ▼
-Data Transformation     ← Encoding, scaling via Scikit-Learn pipelines
+Data Transformation     ← Categorical encoding + numerical scaling via ColumnTransformer
       │
       ▼
-Model Training          ← Trains & compares multiple regression models
+Model Training          ← Trains 11 regression models in a single automated loop
       │
       ▼
-Model Evaluation        ← Selects best model by R² score, saves artifact
+Model Evaluation        ← Selects best model by R²; serializes artifact to disk
       │
       ▼
-Flask Web App           ← Serves real-time predictions from user input
+Flask Web App           ← Loads saved model; serves real-time predictions via UI
+      │
+      ▼
+Docker + AWS            ← Containerized deployment; CI/CD managed by GitHub Actions
 ```
 
 ---
@@ -90,23 +78,25 @@ Flask Web App           ← Serves real-time predictions from user input
 <a id="model-results"></a>
 ## 📊 Model Results
 
-Multiple regression algorithms were evaluated and compared on the held-out test set. Below are the actual R² scores achieved:
+All models were evaluated on a held-out test set. The pipeline automatically selects and deploys the best performer.
 
 | Model | R² Score |
 |---|---|
-| **Ridge Regression** ✅ | **0.88** |
-| **Linear Regression** ✅ | **0.88** |
+| **Ridge Regression** ✅ *(deployed)* | **0.88** |
+| Linear Regression | 0.88 |
 | Gradient Boosting | 0.87 |
 | AdaBoost | 0.85 |
 | CatBoost | 0.85 |
 | Random Forest | 0.85 |
 | XGBoost | 0.85 |
 | Lasso | 0.82 |
-| KNN | 0.77 |
-| SVR | 0.74 |
+| K-Nearest Neighbors | 0.77 |
+| Support Vector Regression | 0.74 |
 | Decision Tree | 0.68 |
 
-**Best Performers:** Ridge and Linear Regression achieved virtually identical performance (R² = 0.8816), with the pipeline automatically selecting Ridge for deployment due to superior regularization properties. The results demonstrate that simpler models often outperform complex ensemble methods when features are properly engineered.
+Ridge and Linear Regression achieved identical R² scores (0.8816). Ridge was selected for deployment due to its regularization properties, which improve generalization on unseen data. The results also highlight that well-engineered features can allow simpler models to match or outperform complex ensembles.
+
+For detailed exploratory data analysis, see [`notebook/README.md`](./notebook/README.md).
 
 ---
 
@@ -121,8 +111,7 @@ Multiple regression algorithms were evaluated and compared on the held-out test 
 | Data Processing | Pandas, NumPy |
 | Containerization | Docker |
 | CI/CD | GitHub Actions |
-| Cloud Deployment | AWS |
-| Environment | Conda / pip + virtualenv |
+| Cloud Deployment | AWS Elastic Beanstalk |
 
 ---
 
@@ -133,23 +122,27 @@ Multiple regression algorithms were evaluated and compared on the held-out test 
 e2e-ml-student-perf/
 │
 ├── src/
-│   ├── components/         # Ingestion, transformation, and training modules
-│   ├── pipeline/           # Training pipeline & prediction pipeline
-│   └── utils/              # Helper functions (model saving, evaluation, etc.)
+│   ├── components/         # Data ingestion, transformation, and model training
+│   ├── pipeline/           # Training pipeline and prediction pipeline
+│   └── utils/              # Shared helpers (model I/O, evaluation metrics)
 │
-├── artifacts/              # Saved model (.pkl) and processed datasets
-├── notebooks/              # EDA and experimentation notebooks
+├── tests/                  # Unit and integration test suite (93% coverage)
+├── artifacts/              # Serialized model (.pkl) and processed datasets
+├── notebooks/              # EDA and prototyping notebooks
 ├── templates/              # Flask HTML templates
 │
-├── app.py                  # Flask app — routes for UI and prediction
+├── app.py                  # Flask application — prediction routes and UI
+├── Dockerfile
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-<a id="installation--setup"></a>
-## ⚙️ Installation & Setup
+<a id="getting-started"></a>
+## ⚙️ Getting Started
+
+To directly use pre-built docker images, see [Docker Support](#docker-support)
 
 ### 1. Clone the repository
 
@@ -158,11 +151,11 @@ git clone https://github.com/aishvadla/e2e-ml-student-perf.git
 cd e2e-ml-student-perf
 ```
 
-### 2. Create a virtual environment
+### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate      # Mac/Linux
+source venv/bin/activate      # macOS / Linux
 venv\Scripts\activate         # Windows
 ```
 
@@ -171,6 +164,25 @@ venv\Scripts\activate         # Windows
 ```bash
 pip install -r requirements.txt
 ```
+
+### 4. Run the application
+
+**Option A — Quick start using pre-trained artifacts**
+
+Pre-trained model artifacts are included in the `artifacts/` directory. Skip training and launch the app directly:
+
+```bash
+python application.py
+```
+
+**Option B — Retrain from scratch**
+
+```bash
+python src/pipeline/train_pipeline.py   # Runs full pipeline; saves new model artifact
+python application.py                   # Starts the web app
+```
+
+Navigate to `http://localhost:8080/` and enter student attributes to receive a predicted math score.
 
 ---
 
@@ -183,15 +195,10 @@ This project includes Docker support for easy containerization and deployment. A
 
 - Docker installed on your system
 
-### Option A — Pull the Pre-built Image from Docker Hub
+### Option A — Pull and run the pre-built image
 
 ```bash
 docker pull avadlamu/ml-app-student-perf:latest
-```
-
-### Run the Application with Docker
-
-```bash
 docker run -p 8080:8080 avadlamu/ml-app-student-perf:latest
 ```
 
@@ -208,18 +215,23 @@ The application will be available at `http://localhost:8080/`.
 
 ---
 
-<a id="ci-cd"></a>
-## 🔁 CI/CD
+<a id="ci-cd-pipeline"></a>
+## 🔁 CI/CD Pipeline
 
-This repository now includes a GitHub Actions pipeline that:
+The project utilizes **GitHub Actions** to implement a three-stage automated pipeline:
 
-- runs unit and integration tests with `pytest`
-- validates application dependencies
-- builds the Docker image
-- pushes the image to Docker Hub
-- deploys the container to AWS automatically on `main`
+1. **Continuous Integration (CI)**: 
+   - Validates application dependencies.
+   - Execution of the full test suite with `Pytest`.
+   - Achievement of **93% code coverage**.
+2. **Continuous Delivery (CD)**: 
+   - Builds a Docker image of the application.
+   - Pushes the versioned image to **DockerHub**.
+3. **Continuous Deployment (CD)**: 
+   - Signals **AWS Elastic Beanstalk** to pull the latest image.
+   - Updates the production environment without manual intervention.
 
-The CI/CD workflow ensures every change is tested and the latest container is available in production.
+The CI/CD workflow ensures every change is validated before reaching production.
 
 ---
 
@@ -236,8 +248,6 @@ To ensure the reliability of the ML pipeline, this project maintains a high stan
   - Model Trainer (Pickle serialization & Evaluation)
   - Prediction Pipeline (Inference logic)
 
-![Coverage](https://img.shields.io/badge/Coverage-93%25-brightgreen)
-
 ### Running Tests
 To execute the test suite and verify the environment locally:
 ```bash
@@ -250,37 +260,6 @@ python -m pytest --cov=src tests/
 
 ---
 
-<a id="usage"></a>
-## 🖥️ Usage
-
-### Option A — Use pre-trained artifacts (quick start)
-
-The `artifacts/` folder in this repo contains a pre-trained model. You can skip training and go straight to running the app:
-
-```bash
-python application.py
-```
-
-### Option B — Retrain from scratch
-
-```bash
-# Step 1: Run the full training pipeline
-python src/pipeline/train_pipeline.py
-
-# Step 2: Start the web app
-python application.py
-```
-
-Once the app is running, open your browser and navigate to:
-
-```
-http://localhost:8080/
-```
-
-Enter the student's attributes (gender, parental education, test prep course, etc.) and receive a real-time predicted math score.
-
----
-
 <a id="key-design-decisions"></a>
 ## 💡 Key Design Decisions
 
@@ -290,20 +269,22 @@ Enter the student's attributes (gender, parental education, test prep course, et
 
 **Automated model selection** — All models are trained and evaluated in a single loop. The best-performing model is saved automatically to `artifacts/`, so the deployment always uses the current champion.
 
-**Separation of training and inference** — The training pipeline (`train_pipeline.py`) and prediction pipeline (`predict_pipeline.py`) are fully decoupled. The Flask app only calls the prediction pipeline and never re-trains on user input.
+**Separation of training and inference** — The training pipeline (`train_pipeline.py`) and prediction pipeline (`predict_pipeline.py`) are fully decoupled.
 
 ---
 
-<a id="future-improvements"></a>
-## 🚀 Future Improvements
+<a id="roadmap"></a>
+## 🚀 Roadmap
 
-- [x] Add Docker support for containerization
-- [x] Add unit tests, integration tests and validation tests
-- [x] Deploy to cloud via AWS
-- [x] Add CI/CD pipeline with GitHub Actions
-- [ ] Add logging and experiment tracking with MLflow
-- [ ] Model Monitoring, Logging and Latency
-- [x] Improve Flask UI/UX
+- [x] Modular pipeline architecture
+- [x] Automated model selection and artifact serialization
+- [x] Unit and integration tests (93% coverage)
+- [x] Docker containerization
+- [x] CI/CD with GitHub Actions
+- [x] Cloud deployment on AWS Elastic Beanstalk
+- [ ] Experiment tracking with MLflow
+- [ ] Model performance monitoring and drift detection
+- [ ] Structured logging and latency instrumentation
 
 ---
 

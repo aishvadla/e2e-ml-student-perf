@@ -6,7 +6,9 @@ from src.components.data_transformation import DataTransformation
 from src.utils import load_object
 
 
-def test_initiate_data_transformation_produces_transformed_arrays(sample_df, sample_arrays, tmp_path):
+def test_initiate_data_transformation_produces_transformed_arrays(
+    sample_df, sample_arrays, tmp_path
+):
     train_array, test_array, transformer = sample_arrays
 
     assert train_array.shape[0] == len(sample_df)
@@ -26,7 +28,9 @@ def test_initiate_data_transformation_produces_transformed_arrays(sample_df, sam
     assert hasattr(preprocessor, "transform")
 
 
-def test_get_preprocessing_pipeline_has_expected_components(sample_df, sample_arrays, tmp_path):
+def test_get_preprocessing_pipeline_has_expected_components(
+    sample_df, sample_arrays, tmp_path
+):
 
     _, _, transformer = sample_arrays
 

@@ -105,7 +105,7 @@ def evaluate_models(X_train, y_train, X_test, y_test, models):
         logging.info("Evaluating models")
         model_report = {}
         best_model = None
-        best_score = -float('inf')
+        best_score = -float("inf")
         for model_name, model_info in models.items():
             gs = GridSearchCV(model_info["model"], model_info["params"], cv=5)
             gs.fit(X_train, y_train)

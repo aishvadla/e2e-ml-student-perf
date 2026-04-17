@@ -18,7 +18,9 @@ def test_initiate_model_trainer_trains_and_saves_best_model(sample_arrays, tmp_p
     trainer.initiate_model_trainer(train_array, test_array)
 
     # Check that the model file was created
-    assert os.path.exists(trainer.model_trainer_config.trained_model_file_path), "Model pkl file is not generated"
+    assert os.path.exists(
+        trainer.model_trainer_config.trained_model_file_path
+    ), "Model pkl file is not generated"
 
     # Load the saved model and verify it's a fitted estimator
     saved_model = load_object(trainer.model_trainer_config.trained_model_file_path)

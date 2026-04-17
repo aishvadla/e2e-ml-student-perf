@@ -57,3 +57,30 @@ jobs:
         
         docker tag avadlamu/ml-app-student-perf:v${{ github.run_number }} avadlamu/ml-app-student-perf:latest
         docker push avadlamu/ml-app-student-perf:latest
+
+  continuous-deployment:
+    name: Continuous Deployment
+    runs-on: ubuntu-latest
+    needs: build-push-docker-image
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: student-performance-app
+          environment_name: Student-performance-app-env
+          version_label: ${{ github.run_number }}
+          region: us-west-2
+          deployment_package: Dockerrun.aws.json

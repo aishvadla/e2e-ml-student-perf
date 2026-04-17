@@ -21,6 +21,7 @@ A production-style, end-to-end machine learning system that predicts student exa
 - [Project Structure](#project-structure)
 - [Installation & Setup](#installation--setup)
 - [Docker Support](#docker-support)
+- [Testing & Quality Assurance](#testing--quality-assurance)
 - [Usage](#usage)
 - [Key Design Decisions](#key-design-decisions)
 - [Future Improvements](#future-improvements)
@@ -201,6 +202,31 @@ The application will be available at `http://localhost:8080/`.
 
 ---
 
+<a id="testing--quality-assurance"></a>
+## 🧪 Testing & Quality Assurance
+
+To ensure the reliability of the ML pipeline, this project maintains a high standard of automated testing.
+
+- **Framework:** `pytest`
+- **Coverage:** **88%** (Unit & Integration tests)
+- **Components Tested:**
+  - Data Ingestion (Train-Test Split logic)
+  - Data Transformation (ColumnTransformer & Scaling)
+  - Model Trainer (Pickle serialization & Evaluation)
+  - Prediction Pipeline (Inference logic)
+
+### Running Tests
+To execute the test suite and verify the environment locally:
+```bash
+# Run all tests
+python -m pytest tests/
+
+# Run with coverage report
+python -m pytest --cov=src tests/
+```
+
+---
+
 <a id="usage"></a>
 ## 🖥️ Usage
 
@@ -249,7 +275,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 ## 🚀 Future Improvements
 
 - [x] Add Docker support for containerization
-- [ ] Add unit tests, integration tests and validation tests
+- [x] Add unit tests, integration tests and validation tests (88% test coverage achieved)
 - [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
 - [ ] Add CI/CD pipeline with GitHub Actions
 - [ ] Add logging and experiment tracking with MLflow

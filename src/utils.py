@@ -104,17 +104,23 @@ def evaluate_models(X_train, y_train, X_test, y_test, models):
     try:
         logging.info("Evaluating models")
         model_report = {}
+        best_model = None
+        best_score = -float('inf')
         for model_name, model_info in models.items():
             gs = GridSearchCV(model_info["model"], model_info["params"], cv=5)
             gs.fit(X_train, y_train)
 
-            best_model = gs.best_estimator_
+            best_estimator = gs.best_estimator_
 
-            y_train_pred = best_model.predict(X_train)
-            y_test_pred = best_model.predict(X_test)
+            y_train_pred = best_estimator.predict(X_train)
+            y_test_pred = best_estimator.predict(X_test)
             train_model_score = r2_score(y_train, y_train_pred)
             test_model_score = r2_score(y_test, y_test_pred)
             model_report[model_name] = test_model_score
+
+            if test_model_score > best_score:
+                best_score = test_model_score
+                best_model = best_estimator
 
         logging.info("Completed model evaluation")
         return model_report, best_model

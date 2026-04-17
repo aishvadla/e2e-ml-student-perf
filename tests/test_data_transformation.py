@@ -6,29 +6,16 @@ from src.components.data_transformation import DataTransformation
 from src.utils import load_object
 
 
-def test_initiate_data_transformation_produces_transformed_arrays(sample_df, tmp_path):
-    train_csv = tmp_path / "train.csv"
-    test_csv = tmp_path / "test.csv"
+def test_initiate_data_transformation_produces_transformed_arrays(sample_df, sample_arrays, tmp_path):
+    train_array, test_array, transformer = sample_arrays
 
-    sample_df.to_csv(train_csv, index=False)
-    sample_df.to_csv(test_csv, index=False)
-
-    transformer = DataTransformation()
-    transformer.data_transformation_config.preprocessor_obj_file_path = str(
-        tmp_path / "preprocessor.pkl"
-    )
-
-    train_arr, test_arr = transformer.initiate_data_transformation(
-        str(train_csv), str(test_csv)
-    )
-
-    assert train_arr.shape[0] == len(sample_df)
-    assert test_arr.shape[0] == len(sample_df)
-    assert train_arr.shape[1] > 1
-    assert test_arr.shape[1] == train_arr.shape[1]
+    assert train_array.shape[0] == len(sample_df)
+    assert test_array.shape[0] == len(sample_df)
+    assert train_array.shape[1] > 1
+    assert test_array.shape[1] == train_array.shape[1]
 
     # Verify that the target was preserved in the last column
-    assert np.array_equal(train_arr[:, -1], sample_df["math_score"].to_numpy())
+    assert np.array_equal(train_array[:, -1], sample_df["math_score"].to_numpy())
     assert os.path.exists(
         transformer.data_transformation_config.preprocessor_obj_file_path
     ), "preprocessor pkl file is not generated"
@@ -39,20 +26,9 @@ def test_initiate_data_transformation_produces_transformed_arrays(sample_df, tmp
     assert hasattr(preprocessor, "transform")
 
 
-def test_get_preprocessing_pipeline_has_expected_components(sample_df, tmp_path):
+def test_get_preprocessing_pipeline_has_expected_components(sample_df, sample_arrays, tmp_path):
 
-    train_csv = tmp_path / "train.csv"
-    test_csv = tmp_path / "test.csv"
-
-    sample_df.to_csv(train_csv, index=False)
-    sample_df.to_csv(test_csv, index=False)
-
-    transformer = DataTransformation()
-    transformer.data_transformation_config.preprocessor_obj_file_path = str(
-        tmp_path / "preprocessor.pkl"
-    )
-
-    transformer.initiate_data_transformation(str(train_csv), str(test_csv))
+    _, _, transformer = sample_arrays
 
     numeric_features = ["reading_score", "writing_score"]
     nominal_features = ["gender", "race_ethnicity", "lunch", "test_preparation_course"]

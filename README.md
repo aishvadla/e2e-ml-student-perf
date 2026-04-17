@@ -208,12 +208,14 @@ The application will be available at `http://localhost:8080/`.
 To ensure the reliability of the ML pipeline, this project maintains a high standard of automated testing.
 
 - **Framework:** `pytest`
-- **Coverage:** **88%** (Unit & Integration tests)
+- **Coverage:** **93%** (Unit & Integration tests)
 - **Components Tested:**
   - Data Ingestion (Train-Test Split logic)
   - Data Transformation (ColumnTransformer & Scaling)
   - Model Trainer (Pickle serialization & Evaluation)
   - Prediction Pipeline (Inference logic)
+
+![Coverage](https://img.shields.io/badge/Coverage-93%25-brightgreen)
 
 ### Running Tests
 To execute the test suite and verify the environment locally:
@@ -275,7 +277,7 @@ Enter the student's attributes (gender, parental education, test prep course, et
 ## 🚀 Future Improvements
 
 - [x] Add Docker support for containerization
-- [x] Add unit tests, integration tests and validation tests (88% test coverage achieved)
+- [x] Add unit tests, integration tests and validation tests
 - [ ] Deploy to cloud (AWS Elastic Beanstalk / GCP App Engine)
 - [ ] Add CI/CD pipeline with GitHub Actions
 - [ ] Add logging and experiment tracking with MLflow

@@ -2,9 +2,16 @@ name: mlapp-workflow
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
 
 jobs:
   integration:

@@ -12,6 +12,10 @@ A production-grade, end-to-end machine learning system that predicts student exa
 
 ## 🚀 Demo & Deployment
 
+**Access the live application here:** [Student Performance Predictor on AWS](http://Student-performance-app-env.eba-xfsmknai.us-west-2.elasticbeanstalk.com/)
+
+Note: This link is active during scheduled demo periods. If the site is down, please refer to the GIF demo.
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/523d91a6-4dd8-461f-b2f3-7a7dec4d7ad3" width="750" alt="Application Demo" />
 </p>

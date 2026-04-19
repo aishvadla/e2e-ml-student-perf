@@ -86,7 +86,7 @@ Docker + AWS            ← Containerized deployment; CI/CD managed by GitHub Ac
 <a id="model-results"></a>
 ## 📊 Model Results
 
-All models were evaluated on a held-out test set. The pipeline automatically selects and deploys the best performer.
+All models were evaluated on a held-out test set. The pipeline automatically selects and deploys the best performer. Experiment metrics and the selected model are tracked using MLflow for reproducibility and comparison.
 
 | Model | R² Score |
 |---|---|
@@ -113,13 +113,14 @@ For detailed exploratory data analysis, see [`notebook/README.md`](./notebook/RE
 
 | Category | Tools |
 |---|---|
-| Language | Python 3.8+ |
+| Language | Python |
 | ML / Modeling | Scikit-Learn, XGBoost, CatBoost |
 | Web Framework | Flask |
 | Data Processing | Pandas, NumPy |
 | Containerization | Docker |
 | CI/CD | GitHub Actions |
-| Cloud Deployment | AWS Elastic Beanstalk |
+| Cloud Deployment | AWS Elastic Beanstalk, IAM |
+| Experiment Tracking | MLflow |
 
 ---
 
@@ -290,9 +291,11 @@ python -m pytest --cov=src tests/
 - [x] Docker containerization
 - [x] CI/CD with GitHub Actions
 - [x] Cloud deployment on AWS Elastic Beanstalk
-- [ ] Experiment tracking with MLflow
+- [x] Experiment tracking with MLflow
 - [ ] Model performance monitoring and drift detection
 - [ ] Structured logging and latency instrumentation
+- [ ] Update model_trainer to use test set only once after final model selection
+- [ ] Data versioning using dvc
 
 ---
 

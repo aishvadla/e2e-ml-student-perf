@@ -1,6 +1,10 @@
 # Model training dump
 catboost_info
 
+# MLflow tracking data
+mlruns/
+mlflow.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

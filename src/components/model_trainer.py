@@ -27,6 +27,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
+import mlflow
+import mlflow.sklearn
 
 from src.components.data_ingestion import DataIngestion
 from src.components.data_transformation import DataTransformation
@@ -170,6 +172,19 @@ class ModelTrainer:
             logging.info(
                 f"Best model found: {best_model_name} with R2 score: {best_model_score}"
             )
+
+            # Log experiment with MLflow
+            with mlflow.start_run():
+                mlflow.log_param("best_model", best_model_name)
+                mlflow.log_metric("best_r2_score", best_model_score)
+                mlflow.log_metric("test_size", len(y_test))
+
+                # Log all model scores
+                for model_name, score in model_report.items():
+                    mlflow.log_metric(f"{model_name}_r2", score)
+
+                # Log the best model
+                mlflow.sklearn.log_model(best_model, "best_model")
 
             # Serialize and save the best model
             save_object(

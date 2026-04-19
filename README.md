@@ -113,13 +113,15 @@ For detailed exploratory data analysis, see [`notebook/README.md`](./notebook/RE
 
 | Category | Tools |
 |---|---|
-| Language | Python 3.8+ |
+| Language | Python |
 | ML / Modeling | Scikit-Learn, XGBoost, CatBoost |
 | Web Framework | Flask |
 | Data Processing | Pandas, NumPy |
 | Containerization | Docker |
 | CI/CD | GitHub Actions |
-| Cloud Deployment | AWS Elastic Beanstalk, IAM || Experiment Tracking | MLflow |
+| Cloud Deployment | AWS Elastic Beanstalk, IAM |
+| Experiment Tracking | MLflow |
+
 ---
 
 <a id="project-structure"></a>
